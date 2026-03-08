@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ЗаборМаркет — качественная металлочерепица, профнастил и сайдинг по низким ценам</title>
+    <meta name="description"
+        content="Интернет-магазин ЗаборМаркет: производство и продажа металлочерепицы Монтерей, профнастила, металлического сайдинга и штакетника. Доставка и гарантия качества.">
+    <meta name="keywords"
+        content="металлочерепица, профнастил, Монтерей, сайдинг металлический, штакетник, ПСП панели, доборные элементы, купить кровлю, ЗаборМаркет">
+    <meta property="og:title" content="ЗаборМаркет — все для вашей кровли и забора">
+    <meta property="og:description"
+        content="Качественные материалы из металла напрямую от производителя. Рассчитайте стоимость онлайн!">
+    <meta property="og:type" content="website">
+    <link rel="stylesheet" href="css/style.css">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&family=Playfair+Display:ital,wght@0,600;1,600&display=swap"
+        rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "LocalBusiness",
+      "name": "ЗаборМаркет",
+      "image": "img/evrozhaluzi_main.jpg",
+      "description": "Интернет-магазин ЗаборМаркет: производство и продажа металлочерепицы Монтерей, профнастила, металлического сайдинга и штакетника. Доставка и гарантия качества.",
+      "url": "https://zabormarket.ru",
+      "telephone": "+79656000635",
+      "address": {
+        "@type": "PostalAddress",
+        "addressLocality": "Казань",
+        "addressCountry": "RU"
+      }
+    }
+    </script>
+</head>
+
+<body>
+
+    <!-- Header -->
+    <header class="site-header">
+        <div class="container header-container">
+            <a href="#" class="logo">
+                <svg class="site-logo-icon" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                    <circle cx="50" cy="50" r="48" fill="var(--accent)" />
+                    <path d="M 65 30 C 40 30, 30 45, 50 50 C 70 55, 60 70, 35 70" stroke="#ffffff" stroke-width="12"
+                        fill="none" stroke-linecap="round" />
+                </svg>
+                Забор<span>Маркет</span>
+            </a>
+            <nav class="main-nav">
+                <a href="#catalog">Каталог</a>
+                <a href="#contacts">Контакты</a>
+            </nav>
+            <div class="header-actions">
+                <a class="phone-link" href="tel:+79656000635"><i class="fas fa-phone"></i> <span>+7 965
+                        600-06-35</span></a>
+                <button class="cart-btn">
+                    <i class="fas fa-shopping-cart"></i>
+                    <span class="cart-count">0</span>
+                </button>
+                <button class="mobile-menu-btn" aria-label="Открыть меню">
+                    <i class="fas fa-bars"></i>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Cart Drawer -->
+    <div class="cart-overlay" id="cartOverlay"></div>
+    <aside class="cart-drawer" id="cartDrawer">
+        <div class="cart-drawer-header">
+            <h3>Корзина</h3>
+            <button class="cart-close-btn" id="cartCloseBtn"><i class="fas fa-times"></i></button>
+        </div>
+        <div class="cart-drawer-body" id="cartBody">
+            <div class="cart-empty">
+                <i class="fas fa-shopping-cart"></i>
+                <p>Корзина пуста</p>
+            </div>
+        </div>
+        <div class="cart-drawer-footer" id="cartFooter" style="display:none">
+            <div class="cart-total-row">
+                <span>Итого:</span>
+                <strong id="cartTotal">0 ₽</strong>
+            </div>
+            <a class="btn btn-primary btn-large cart-order-btn" id="cartOrderBtn" href="https://t.me/keml00"
+                target="_blank">
+                <i class="fab fa-telegram"></i> Оформить заказ в Telegram
+            </a>
+        </div>
+    </aside>
+
+    <!-- Main Catalog Section -->
+    <main id="catalog" class="catalog-section container">
+        <div class="catalog-header">
+            <h2>Наш каталог</h2>
+            <div class="remote-order-info glass-panel"
+                style="margin-bottom: 1rem; border-color: rgba(45, 85, 40, 0.5); background: rgba(45, 85, 40, 0.1);">
+                <i class="fas fa-truck" style="color: #4CAF50;"></i>
+                <p><strong>Быстрая доставка!</strong> Бережно доставим ваш заказ нашим автотранспортом по городу и
+                    области. Точную стоимость и сроки уточняйте у менеджера.</p>
+            </div>
+            <div class="remote-order-info glass-panel">
+                <i class="fas fa-info-circle"></i>
+                <p><strong>Заказывайте удаленно!</strong> Получите точный расчет стоимости и бесплатную консультацию
+                    через Telegram или WhatsApp. Просто добавьте товары в корзину и нажмите «Оформить».</p>
+            </div>
+            <p>Выберите категорию для настройки параметров</p>
+        </div>
+
+        <div class="catalog-layout">
+            <!-- Sidebar / Categories -->
+            <aside class="catalog-sidebar">
+                <div class="sidebar-block">
+                    <h3>Категории</h3>
+                    <ul class="category-list" id="categoryList"></ul>
+                </div>
+            </aside>
+
+            <!-- Main Product & Configuration Area -->
+            <section class="catalog-main">
+                <div id="productConfigurator" class="configurator-container glass-panel hidden">
+                    <!-- Header -->
+                    <div class="config-header">
+                        <div class="config-image-container">
+                            <img id="configImage" src="" alt="Выбранный строительный материал" class="config-img">
+                            <div id="dynamicLogo" class="dynamic-logo"></div>
+                        </div>
+                        <div class="config-title-box">
+                            <h2 id="configTitle">Выбор параметров</h2>
+                            <p id="configDesc">Определите модель, толщину и цвет</p>
+                        </div>
+                    </div>
+
+                    <div class="config-body">
+                        <!-- Specs Row -->
+                        <div class="specs-block" id="specsBlock">
+                            <div class="spec-item">
+                                <span class="spec-label">Общая ширина:</span>
+                                <span class="spec-value" id="specTotalWidth">—</span>
+                            </div>
+                            <div class="spec-item">
+                                <span class="spec-label">Рабочая ширина:</span>
+                                <span class="spec-value" id="specWorkingWidth">—</span>
+                            </div>
+                        </div>
+
+                        <!-- Model Selection -->
+                        <div class="config-group">
+                            <label>Модель / Профиль:</label>
+                            <div class="chip-group" id="modelSelect"></div>
+                        </div>
+
+                        <!-- Thickness Selection -->
+                        <div class="config-group">
+                            <label>Толщина металла (мм):</label>
+                            <div class="chip-group" id="thicknessSelect"></div>
+                        </div>
+
+                        <!-- Color Selection -->
+                        <div class="config-group">
+                            <label>Выберите цвет (RAL):</label>
+                            <h4 class="color-subset-title">Основные цвета</h4>
+                            <div class="color-grid" id="mainColorGrid"></div>
+                            <h4 class="color-subset-title">Дополнительные цвета</h4>
+                            <div class="color-grid" id="additionalColorGrid"></div>
+                            <div class="selected-color-info">
+                                Выбранный цвет: <strong id="selectedColorName">Не выбран</strong>
+                            </div>
+                        </div>
+
+                        <!-- Length -->
+                        <div class="config-group hidden" id="lengthConfigGroup">
+                            <label>Длина (м):</label>
+                            <div class="input-wrap">
+                                <input type="number" id="lengthInput" min="0.5" max="15" step="0.1"
+                                    placeholder="Например: 3.5">
+                                <span class="input-hint">Нарезка любой длины, индивидуально</span>
+                                <span class="input-hint length-limit" id="lengthLimitInfo"></span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="config-footer">
+                        <div class="price-estimate">
+                            <span>Стоимость:</span>
+                            <strong class="price-value" id="priceValue">По запросу</strong>
+                        </div>
+                        <button class="btn btn-primary" id="addToCartBtn">Добавить в корзину</button>
+                    </div>
+                </div>
+
+                <!-- Empty State -->
+                <div id="emptyState" class="empty-state">
+                    <i class="fas fa-hand-pointer"></i>
+                    <h3>Выберите категорию слева</h3>
+                    <p>Для начала конфигурации материалов</p>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <!-- Contacts Section -->
+    <section id="contacts" class="contacts-section container">
+        <h2>Контакты</h2>
+        <div class="contacts-grid">
+            <div class="contact-card glass-panel">
+                <i class="fas fa-phone-alt"></i>
+                <div>
+                    <p class="contact-label">Телефон / WhatsApp / Telegram</p>
+                    <a href="tel:+79656000635" class="contact-value">+7 965 600-06-35</a>
+                </div>
+            </div>
+            <div class="contact-card glass-panel">
+                <i class="fab fa-telegram"></i>
+                <div>
+                    <p class="contact-label">Мессенджер</p>
+                    <a href="https://t.me/keml00" target="_blank" class="contact-value">@keml00</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="site-footer">
+        <div class="container footer-content">
+            <div class="footer-col">
+                <a href="#" class="logo footer-logo">
+                    <svg class="site-logo-icon" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                        <circle cx="50" cy="50" r="48" fill="var(--accent)" />
+                        <path d="M 65 30 C 40 30, 30 45, 50 50 C 70 55, 60 70, 35 70" stroke="#ffffff" stroke-width="12"
+                            fill="none" stroke-linecap="round" />
+                    </svg>
+                    Забор<span>Маркет</span>
+                </a>
+                <p>Производство и продажа качественных строительных материалов из металла.</p>
+            </div>
+            <div class="footer-col">
+                <h3>Контакты</h3>
+                <p><i class="fas fa-phone"></i> <a href="tel:+79656000635">+7 965 600-06-35</a></p>
+                <p><i class="fab fa-telegram"></i> <a href="https://t.me/keml00" target="_blank">@keml00</a></p>
+                <p><i class="fas fa-truck"></i> Доставка нашим автотранспортом</p>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2026 ЗаборМаркет. Все права защищены.</p>
+        </div>
+    </footer>
+
+    <!-- Floating Telegram Chat Button -->
+    <a class="tg-float-btn" href="https://t.me/keml00" target="_blank" title="Написать в Telegram">
+        <i class="fab fa-telegram"></i>
+        <span class="tg-tooltip">Написать в Telegram</span>
+    </a>
+
+    <script type="module" src="js/main.js"></script>
+</body>
+
+</html>

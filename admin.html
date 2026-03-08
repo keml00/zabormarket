@@ -1,0 +1,462 @@
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ЗаборМаркет — Панель управления ценами</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+    <style>
+        :root {
+            --bg: #0a0b0e;
+            --surface: #14161c;
+            --glass: rgba(26, 28, 35, 0.7);
+            --accent: #E75B12;
+            --text: #fff;
+            --text2: #a0a4b0;
+            --border: rgba(255, 255, 255, 0.08);
+            --radius: 12px;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Montserrat', sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            min-height: 100vh;
+            padding: 2rem;
+        }
+
+        h1 {
+            font-size: 2rem;
+            margin-bottom: 0.3rem;
+            color: var(--accent);
+        }
+
+        .subtitle {
+            color: var(--text2);
+            margin-bottom: 2.5rem;
+            font-size: 0.95rem;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+            gap: 2rem;
+        }
+
+        .card {
+            background: var(--glass);
+            backdrop-filter: blur(10px);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 1.8rem;
+        }
+
+        .card h2 {
+            font-size: 1.2rem;
+            margin-bottom: 0.3rem;
+        }
+
+        .card p {
+            color: var(--text2);
+            font-size: 0.88rem;
+            margin-bottom: 1.2rem;
+        }
+
+        label {
+            display: block;
+            font-size: 0.9rem;
+            font-weight: 600;
+            margin-bottom: 0.4rem;
+            color: var(--text2);
+        }
+
+        select,
+        input[type="number"],
+        input[type="file"] {
+            width: 100%;
+            padding: 0.7rem 1rem;
+            background: #1e2028;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            color: var(--text);
+            font-family: inherit;
+            font-size: 0.95rem;
+            margin-bottom: 1rem;
+        }
+
+        select:focus,
+        input:focus {
+            outline: none;
+            border-color: var(--accent);
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.75rem 1.5rem;
+            background: linear-gradient(135deg, var(--accent), #ff7c3a);
+            color: #fff;
+            border: none;
+            border-radius: 8px;
+            font-family: inherit;
+            font-weight: 600;
+            cursor: pointer;
+            font-size: 0.95rem;
+            transition: all 0.2s;
+        }
+
+        .btn:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 16px rgba(231, 91, 18, 0.4);
+        }
+
+        .btn-outline {
+            background: transparent;
+            border: 1px solid var(--accent);
+            color: var(--accent);
+        }
+
+        .btn-outline:hover {
+            background: rgba(231, 91, 18, 0.1);
+        }
+
+        .row {
+            display: flex;
+            gap: 0.8rem;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .input-row {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .input-row input {
+            margin-bottom: 0;
+            flex: 1;
+        }
+
+        .status {
+            margin-top: 1rem;
+            padding: 0.8rem 1rem;
+            border-radius: 8px;
+            font-size: 0.9rem;
+            display: none;
+        }
+
+        .status.ok {
+            background: rgba(45, 85, 40, 0.3);
+            border: 1px solid #2D5528;
+            color: #90ee90;
+            display: block;
+        }
+
+        .status.err {
+            background: rgba(150, 30, 30, 0.3);
+            border: 1px solid #8b0000;
+            color: #ff8080;
+            display: block;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 1rem;
+            font-size: 0.85rem;
+        }
+
+        th,
+        td {
+            padding: 0.6rem 0.8rem;
+            border: 1px solid var(--border);
+            text-align: left;
+        }
+
+        th {
+            background: rgba(255, 255, 255, 0.04);
+            color: var(--text2);
+            font-weight: 600;
+        }
+
+        td input {
+            width: 100%;
+            background: transparent;
+            border: none;
+            color: var(--text);
+            font-size: 0.85rem;
+            text-align: right;
+            padding: 0;
+        }
+
+        td input:focus {
+            outline: 1px solid var(--accent);
+            border-radius: 4px;
+            padding: 2px 4px;
+        }
+
+        .markup-row {
+            display: grid;
+            grid-template-columns: 1fr auto auto;
+            gap: 0.6rem;
+            align-items: center;
+            margin-bottom: 0.6rem;
+        }
+
+        .markup-row label {
+            margin: 0;
+            color: var(--text);
+            font-size: 0.95rem;
+            font-weight: 500;
+        }
+
+        .markup-row input {
+            margin: 0;
+            width: 80px;
+        }
+
+        .badge {
+            background: rgba(231, 91, 18, 0.15);
+            color: var(--accent);
+            border-radius: 6px;
+            padding: 0.2rem 0.6rem;
+            font-size: 0.8rem;
+            font-weight: 700;
+        }
+
+        .tpl-info {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px dashed var(--border);
+            border-radius: 8px;
+            padding: 1rem;
+            font-size: 0.85rem;
+            color: var(--text2);
+            margin-bottom: 1rem;
+        }
+
+        .tpl-info code {
+            color: var(--accent);
+            background: rgba(231, 91, 18, 0.1);
+            padding: 0.1rem 0.3rem;
+            border-radius: 4px;
+            font-family: monospace;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>Панель управления ценами</h1>
+    <p class="subtitle">ЗаборМаркет — только для администратора</p>
+
+    <div class="grid">
+        <!-- EXCEL UPLOAD -->
+        <div class="card">
+            <h2><i class="fas fa-file-excel" style="color:#2D5528;margin-right:8px"></i>Загрузка прайса из Excel</h2>
+            <p>Заполните шаблон и загрузите файл. Цены обновятся на сайте мгновенно.</p>
+            <div class="tpl-info">
+                Формат таблицы в Excel:<br><br>
+                <code>category</code> | <code>model</code> | <code>thickness</code> | <code>price</code><br><br>
+                Пример:<br>
+                profnastil | S-8 | 0.45 | 650<br>
+                saiding | korabelnaya | 0.45 | 780
+            </div>
+            <label>Выберите .xlsx файл:</label>
+            <input type="file" id="excelFile" accept=".xlsx,.xls">
+            <div class="row">
+                <button class="btn" onclick="loadExcel()"><i class="fas fa-upload"></i> Загрузить прайс</button>
+                <button class="btn btn-outline" onclick="downloadTemplate()"><i class="fas fa-download"></i> Скачать
+                    шаблон</button>
+            </div>
+            <div class="status" id="uploadStatus"></div>
+            <div id="priceTableWrap"></div>
+        </div>
+
+        <!-- MARKUP -->
+        <div class="card">
+            <h2><i class="fas fa-percent" style="color:var(--accent);margin-right:8px"></i>Наценка по категориям</h2>
+            <p>Введите процент наценки для конкретной категории. Цены пересчитаются автоматически на витрине.</p>
+            <div id="markupForm"></div>
+            <button class="btn" onclick="saveMarkups()"><i class="fas fa-save"></i> Сохранить наценки</button>
+            <div class="status" id="markupStatus"></div>
+        </div>
+    </div>
+
+    <script>
+        const CATEGORIES = [
+            { id: 'profnastil', name: 'Профнастил' },
+            { id: 'metallocherepica', name: 'Металлочерепица' },
+            { id: 'saiding', name: 'Сайдинг' },
+            { id: 'psp_sofiti', name: 'ПСП панель и Софиты' },
+            { id: 'shtaketnik', name: 'Штакетник' },
+            { id: 'lameli', name: 'Ламели (Евро жалюзи)' },
+            { id: 'dobornie', name: 'Доборные элементы' },
+        ];
+
+        // ── Markup Form ───────────────────────────────────────────────
+        function buildMarkupForm() {
+            const form = document.getElementById('markupForm');
+            form.innerHTML = CATEGORIES.map(c => {
+                const stored = localStorage.getItem(`markup_${c.id}`) || '0';
+                return `<div class="markup-row">
+            <label>${c.name}</label>
+            <input type="number" id="markup_${c.id}" value="${stored}" step="0.5" placeholder="0">
+            <span class="badge">%</span>
+        </div>`;
+            }).join('');
+        }
+
+        function saveMarkups() {
+            CATEGORIES.forEach(c => {
+                const v = document.getElementById(`markup_${c.id}`)?.value || '0';
+                localStorage.setItem(`markup_${c.id}`, v);
+            });
+            const st = document.getElementById('markupStatus');
+            st.className = 'status ok'; st.textContent = '✓ Наценки сохранены!';
+            setTimeout(() => st.className = 'status', 3000);
+        }
+
+        // ── Excel Upload ───────────────────────────────────────────────
+        function loadExcel() {
+            const file = document.getElementById('excelFile').files[0];
+            const st = document.getElementById('uploadStatus');
+            if (!file) { st.className = 'status err'; st.textContent = 'Выберите файл!'; return; }
+
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                try {
+                    const wb = XLSX.read(e.target.result, { type: 'binary' });
+                    const ws = wb.Sheets[wb.SheetNames[0]];
+                    const rows = XLSX.utils.sheet_to_json(ws, { header: 1 });
+
+                    // Find header row
+                    let headerRow = 0;
+                    for (let i = 0; i < rows.length; i++) {
+                        if (rows[i].some(c => String(c).toLowerCase().includes('category') || String(c).toLowerCase().includes('категор'))) {
+                            headerRow = i; break;
+                        }
+                    }
+                    const headers = rows[headerRow].map(h => String(h).toLowerCase().trim());
+                    const ci = headers.findIndex(h => h.includes('category') || h.includes('категор'));
+                    const mi = headers.findIndex(h => h.includes('model') || h.includes('модел'));
+                    const ti = headers.findIndex(h => h.includes('thick') || h.includes('толщ'));
+                    const pi = headers.findIndex(h => h.includes('price') || h.includes('цена'));
+
+                    if (pi === -1) { throw new Error('Не найдена колонка цены (price / цена)'); }
+
+                    const prices = {};
+                    const tableRows = [];
+                    for (let i = headerRow + 1; i < rows.length; i++) {
+                        const row = rows[i];
+                        if (!row || !row[pi]) continue;
+                        const cat = ci >= 0 ? String(row[ci] || '').trim() : '';
+                        const model = mi >= 0 ? String(row[mi] || '').trim() : '';
+                        const thick = ti >= 0 ? String(row[ti] || '').trim() : '';
+                        const price = parseFloat(row[pi]) || 0;
+                        const key = `${cat}|${model}|${thick}`;
+                        prices[key] = price;
+                        tableRows.push({ cat, model, thick, price, key });
+                    }
+
+                    localStorage.setItem('stroymetal_prices', JSON.stringify(prices));
+                    st.className = 'status ok';
+                    st.textContent = `✓ Загружено ${tableRows.length} позиций. Цены обновлены!`;
+
+                    renderTable(tableRows);
+                } catch (err) {
+                    st.className = 'status err'; st.textContent = 'Ошибка: ' + err.message;
+                }
+            };
+            reader.readAsBinaryString(file);
+        }
+
+        function renderTable(rows) {
+            const wrap = document.getElementById('priceTableWrap');
+            if (rows.length === 0) { wrap.innerHTML = ''; return; }
+            wrap.innerHTML = `<table>
+        <tr><th>Категория</th><th>Модель</th><th>Толщина</th><th>Цена (₽/м²)</th></tr>
+        ${rows.map(r => `<tr><td>${r.cat}</td><td>${r.model}</td><td>${r.thick}</td><td><input type="number" value="${r.price}" onchange="updatePrice('${r.key}', this.value)"></td></tr>`).join('')}
+    </table>`;
+        }
+
+        function updatePrice(key, val) {
+            try {
+                const prices = JSON.parse(localStorage.getItem('stroymetal_prices') || '{}');
+                prices[key] = parseFloat(val) || 0;
+                localStorage.setItem('stroymetal_prices', JSON.stringify(prices));
+            } catch { }
+        }
+
+        // ── Template Download ────────────────────────────────────────
+        function downloadTemplate() {
+            const data = [
+                ['category', 'model', 'thickness', 'price'],
+                ['profnastil', 'S-8', '0.35', 580],
+                ['profnastil', 'S-8', '0.45', 650],
+                ['profnastil', 'S-8', '0.5', 720],
+                ['profnastil', 'S-8', '0.65', 890],
+                ['profnastil', 'NS-10', '0.35', 590],
+                ['profnastil', 'NS-10', '0.45', 660],
+                ['profnastil', 'NS-10', '0.5', 730],
+                ['profnastil', 'NS-10', '0.65', 900],
+                ['profnastil', 'NS-20', '0.35', 600],
+                ['profnastil', 'NS-20', '0.45', 670],
+                ['profnastil', 'NS-20', '0.5', 740],
+                ['profnastil', 'NS-20', '0.65', 910],
+                ['profnastil', 'S-21', '0.35', 610],
+                ['profnastil', 'S-21', '0.45', 680],
+                ['profnastil', 'S-21', '0.5', 750],
+                ['profnastil', 'NS-21', '0.45', 690],
+                ['profnastil', 'NS-35', '0.45', 710],
+                ['profnastil', 'S-44', '0.45', 730],
+                ['profnastil', 'N-60', '0.45', 760],
+                ['profnastil', 'N-75', '0.45', 790],
+                ['metallocherepica', 'monterej', '0.45', 720],
+                ['metallocherepica', 'monterej', '0.5', 800],
+                ['saiding', 'korabelnaya', '0.45', 760],
+                ['saiding', 'evrobrus', '0.45', 770],
+                ['saiding', 'blokkhaus', '0.45', 780],
+                ['saiding', 'brevno4d', '0.45', 790],
+                ['shtaketnik', 'uzkiy', '0.45', 500],
+                ['shtaketnik', 'polukrugly', '0.45', 520],
+                ['shtaketnik', 'figurny', '0.45', 530],
+                ['shtaketnik', 'shirokiy', '0.45', 540],
+                ['shtaketnik', 'pletenka', '0.45', 560],
+                ['lameli', 'evrozhaluzi', '0.45', 850],
+                ['dobornie', 'individual', '0.45', 700],
+                ['dobornie', 'individual', '0.5', 770],
+            ];
+            const ws = XLSX.utils.aoa_to_sheet(data);
+            ws['!cols'] = [{ wch: 20 }, { wch: 18 }, { wch: 10 }, { wch: 12 }];
+            const wb = XLSX.utils.book_new();
+            XLSX.utils.book_append_sheet(wb, ws, 'Прайс');
+            XLSX.writeFile(wb, 'stroymetal_prices.xlsx');
+        }
+
+        buildMarkupForm();
+
+        // Load saved prices into table on init if exists
+        const savedPrices = localStorage.getItem('stroymetal_prices');
+        if (savedPrices) {
+            try {
+                const p = JSON.parse(savedPrices);
+                const rows = Object.entries(p).map(([key, price]) => {
+                    const [cat, model, thick] = key.split('|');
+                    return { cat, model, thick, price, key };
+                });
+                renderTable(rows);
+            } catch { }
+        }
+    </script>
+</body>
+
+</html>
