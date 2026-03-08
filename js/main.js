@@ -37,7 +37,7 @@ const cartBtn = document.querySelector('.cart-btn');
 
 // State
 let currentCategory = null;
-let currentConfig = { model: null, thickness: null, color: null, length: null };
+let currentConfig = { model: null, thickness: null, coating: null, color: null, length: null };
 let cart = [];   // { id, name, model, thickness, color, length, qty, price }
 
 // ─── INIT ─────────────────────────────────────────────────────────
@@ -53,7 +53,6 @@ async function loadExcelPrices() {
         if (!response.ok) throw new Error('Prices file not found');
         const arrayBuffer = await response.arrayBuffer();
 
-        // This relies on the xlsx library loaded globally via CDN in index.html
         if (typeof XLSX === 'undefined') {
             console.error('XLSX library is not loaded');
             return;
@@ -63,37 +62,49 @@ async function loadExcelPrices() {
         const ws = wb.Sheets[wb.SheetNames[0]];
         const rows = XLSX.utils.sheet_to_json(ws, { header: 1 });
 
-        // Find header row
         let headerRow = 0;
         for (let i = 0; i < rows.length; i++) {
-            if (rows[i].some(c => String(c).toLowerCase().includes('category') || String(c).toLowerCase().includes('категор'))) {
+            if (rows[i] && rows[i].some(c => String(c).toLowerCase().includes('category') || String(c).toLowerCase().includes('категор'))) {
                 headerRow = i; break;
             }
         }
 
-        const headers = rows[headerRow].map(h => String(h).toLowerCase().trim());
+        const headers = rows[headerRow].map(h => String(h || '').toLowerCase().trim());
         const ci = headers.findIndex(h => h.includes('category') || h.includes('категор'));
         const mi = headers.findIndex(h => h.includes('model') || h.includes('модел'));
         const ti = headers.findIndex(h => h.includes('thick') || h.includes('толщ'));
+        const coatingi = headers.findIndex(h => h.includes('coating') || h.includes('покрыти'));
         const coli = headers.findIndex(h => h.includes('color') || h.includes('цвет'));
         const pi = headers.findIndex(h => h.includes('price') || h.includes('цена'));
 
         if (pi === -1) return;
 
         const pricesMap = {};
+        const coatingsMap = {};
         for (let i = headerRow + 1; i < rows.length; i++) {
             const row = rows[i];
             if (!row || !row[pi]) continue;
+
             const cat = ci >= 0 ? String(row[ci] || '').trim() : '';
             const model = mi >= 0 ? String(row[mi] || '').trim() : '';
             const thick = ti >= 0 ? String(row[ti] || '').trim() : '';
+            const coating = coatingi >= 0 ? String(row[coatingi] || '').trim() : '';
             const color = coli >= 0 ? String(row[coli] || '').trim() : '';
             const price = parseFloat(row[pi]) || 0;
-            const key = color ? `${cat}|${model}|${thick}|${color}` : `${cat}|${model}|${thick}`;
+
+            const key = `${cat}|${model}|${thick}|${coating}|${color}`;
             pricesMap[key] = price;
+
+            const itemKey = `${cat}|${model}|${thick}`;
+            if (!coatingsMap[itemKey]) coatingsMap[itemKey] = new Set();
+            if (coating) coatingsMap[itemKey].add(coating);
         }
 
         window.excelPrices = pricesMap;
+        window.availableCoatings = {};
+        for (const k in coatingsMap) {
+            window.availableCoatings[k] = Array.from(coatingsMap[k]);
+        }
     } catch (err) {
         console.error('Failed to load prices.xlsx:', err);
     }
@@ -175,7 +186,7 @@ function selectCategory(id, defaultModelId = null) {
     if (!product) return;
     currentCategory = product;
     const firstModel = defaultModelId ? product.models.find(m => m.id === defaultModelId) : product.models[0];
-    currentConfig = { model: firstModel, thickness: product.thicknesses[0], color: null, length: null };
+    currentConfig = { model: firstModel, thickness: product.thicknesses[0], coating: null, color: null, length: null };
     emptyState.classList.add('hidden');
     configuratorContainer.classList.remove('hidden');
     configTitle.textContent = product.name;
@@ -188,14 +199,15 @@ function selectCategory(id, defaultModelId = null) {
         const s = document.querySelector(`.subcategory-item[data-model="${firstModel.id}"]`);
         if (s) s.classList.add('active');
     }
-    renderModels(); renderThicknesses(); renderColors(); renderSpecs(); handleLength(); renderPrice();
+    renderModels(); renderThicknesses(); renderCoatings(); renderColors(); renderSpecs(); handleLength(); renderPrice();
 }
 
 function setActiveModel(modelObj) {
     currentConfig.model = modelObj;
+    currentConfig.coating = null;
     setImage(modelObj.image || currentCategory.image);
     document.querySelectorAll('#modelSelect .chip').forEach(c => c.classList.toggle('active', c.getAttribute('data-id') === modelObj.id));
-    renderSpecs(); renderPrice();
+    renderSpecs(); renderCoatings(); renderPrice();
 }
 
 function setImage(src) { configImage.src = src; }
@@ -280,6 +292,47 @@ function renderThicknesses() {
             thicknessSelect.querySelectorAll('.chip').forEach(c => c.classList.remove('active'));
             e.currentTarget.classList.add('active');
             currentConfig.thickness = e.currentTarget.getAttribute('data-value');
+            currentConfig.coating = null;
+            renderCoatings();
+            renderPrice();
+        });
+    });
+}
+
+function renderCoatings() {
+    const group = document.getElementById('coatingConfigGroup');
+    const select = document.getElementById('coatingSelect');
+    if (!group || !select) return;
+
+    if (!currentCategory || !currentConfig.model || !currentConfig.thickness || !window.availableCoatings) {
+        group.classList.add('hidden');
+        return;
+    }
+
+    const key = `${currentCategory.id}|${currentConfig.model.id}|${currentConfig.thickness}`;
+    const coatings = window.availableCoatings[key] || [];
+
+    if (coatings.length === 0) {
+        group.classList.add('hidden');
+        currentConfig.coating = null;
+        return;
+    }
+
+    group.classList.remove('hidden');
+    // Auto-select first if none selected or invalid
+    if (!currentConfig.coating || !coatings.includes(currentConfig.coating)) {
+        currentConfig.coating = coatings[0];
+    }
+
+    select.innerHTML = coatings.map(c =>
+        `<div class="chip ${currentConfig.coating === c ? 'active' : ''}" data-value="${c}">${c}</div>`
+    ).join('');
+
+    select.querySelectorAll('.chip').forEach(chip => {
+        chip.addEventListener('click', e => {
+            select.querySelectorAll('.chip').forEach(c => c.classList.remove('active'));
+            e.currentTarget.classList.add('active');
+            currentConfig.coating = e.currentTarget.getAttribute('data-value');
             renderPrice();
         });
     });
@@ -337,14 +390,27 @@ function getBasePrice() {
         const store = window.excelPrices;
         if (!currentCategory || !currentConfig.model) return null;
 
-        // 1. Try override from newly loaded excel prices map
-        const baseKey = `${currentCategory.id}|${currentConfig.model.id}|${currentConfig.thickness || ''}`;
-        const colorKey = currentConfig.color ? `${baseKey}|${currentConfig.color}` : baseKey;
+        const cat = currentCategory.id;
+        const mod = currentConfig.model.id;
+        const thick = currentConfig.thickness || '';
+        const coating = currentConfig.coating || '';
+        const color = currentConfig.color || '';
 
         if (store) {
-            // Check specific color price first
-            if (currentConfig.color && store[colorKey] !== undefined) return store[colorKey];
-            // Fallback to general model+thickness price
+            // Priority 1: Exact matches (cat, mod, thick, coating, color)
+            const exactKey = `${cat}|${mod}|${thick}|${coating}|${color}`;
+            if (color && coating && store[exactKey] !== undefined) return store[exactKey];
+
+            // Priority 2: Match coating, any color
+            const coatingAnyColorKey = `${cat}|${mod}|${thick}|${coating}|`;
+            if (coating && store[coatingAnyColorKey] !== undefined) return store[coatingAnyColorKey];
+
+            // Priority 3: Match color, any coating (fallback for legacy excel data)
+            const colorAnyCoatingKey = `${cat}|${mod}|${thick}||${color}`;
+            if (color && store[colorAnyCoatingKey] !== undefined) return store[colorAnyCoatingKey];
+
+            // Priority 4: Match only model and thickness (and implicitly no coating or inherited base coating)
+            const baseKey = `${cat}|${mod}|${thick}||`;
             if (store[baseKey] !== undefined) return store[baseKey];
         }
 
@@ -424,6 +490,7 @@ function addToCart() {
     const name = currentCategory.name;
     const model = currentConfig.model ? currentConfig.model.name : '';
     const thick = currentConfig.thickness || '';
+    const coating = currentConfig.coating || '';
     const color = currentConfig.color || '';
     const len = currentConfig.length ? `${currentConfig.length} м` : '';
     const price = getEffectivePrice();
@@ -433,13 +500,13 @@ function addToCart() {
     else if (price !== null) { itemPrice = price; }
 
     // Build a unique key to group same items
-    const key = `${currentCategory.id}|${model}|${thick}|${color}|${len}`;
+    const key = `${currentCategory.id}|${model}|${thick}|${coating}|${color}|${len}`;
     const existing = cart.find(i => i.key === key);
     if (existing) {
         existing.qty++;
         if (itemPrice !== null) existing.totalPrice = itemPrice * existing.qty;
     } else {
-        cart.push({ key, name, model, thick, color, len, qty: 1, unitPrice: itemPrice, totalPrice: itemPrice });
+        cart.push({ key, name, model, thick, coating, color, len, qty: 1, unitPrice: itemPrice, totalPrice: itemPrice });
     }
 
     renderCart();
@@ -474,7 +541,7 @@ function renderCart() {
             : 'По запросу';
         if (item.totalPrice) totalSum += item.totalPrice;
 
-        const descParts = [item.model, item.thick ? `${item.thick} мм` : '', item.color, item.len].filter(Boolean);
+        const descParts = [item.model, item.thick ? `${item.thick} мм` : '', item.coating, item.color, item.len].filter(Boolean);
         return `
         <div class="cart-item">
             <div class="cart-item-info">
@@ -497,7 +564,7 @@ function renderCart() {
 
     // Build order text for Telegram
     const msgParts = cart.map(i => {
-        const desc = [i.model, i.thick ? `${i.thick} мм` : '', i.color, i.len].filter(Boolean).join(', ');
+        const desc = [i.model, i.thick ? `${i.thick} мм` : '', i.coating, i.color, i.len].filter(Boolean).join(', ');
         const price = i.unitPrice !== null ? `${(i.totalPrice || i.unitPrice).toLocaleString('ru-RU', { maximumFractionDigits: 0 })} ₽` : 'цена по запросу';
         return `• ${i.name} (${desc}) ×${i.qty} — ${price}`;
     });
