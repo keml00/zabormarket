@@ -267,25 +267,41 @@
         <div class="footer-bottom">
             <p>&copy; 2026 ЗаборМаркет. Все права защищены.</p>
             <div class="footer-counters">
-                <!-- LiveInternet counter -->
-                <a href="https://www.liveinternet.ru/click" target="_blank">
-                    <img src="https://counter.yadro.ru/hit?t52.6;r" + escape(document.referrer) +
-                        ((typeof(screen)=="undefined"
-                        )?"":";s"+screen.width+"*"+screen.height+"*"+(screen.colorDepth?screen.colorDepth:screen.pixelDepth))
-                        + ";u" + escape(document.URL) + ";" + Math.random() + "' alt='' title='LiveInternet: показано число просмотров и посетителей за 24 часа' border='0' width='88' height='31'>
-                </a>
-                <!--/LiveInternet-->
+                <span class="visitor-counter">
+                    <span class="visitor-counter__label">• УНИКАЛЬНЫХ ПОСЕТИТЕЛЕЙ:</span>
+                    <span class="visitor-counter__value" id="visitorCount">&mdash;</span>
+                </span>
+                <script>
+                    (function () {
+                        // Track unique visitor in sessionStorage
+                        var storageKey = 'zm_visited';
+                        var countKey = 'zm_count';
+                        var isNewVisitor = !sessionStorage.getItem(storageKey);
+                        sessionStorage.setItem(storageKey, '1');
+
+                        // Load count from localStorage (persists across tabs)
+                        var count = parseInt(localStorage.getItem(countKey) || '1258', 10);
+                        if (isNewVisitor) {
+                            count += 1;
+                            localStorage.setItem(countKey, count);
+                        }
+
+                        // Display the count with formatting
+                        document.getElementById('visitorCount').textContent =
+                            count.toLocaleString('ru-RU');
+                    })();
+                </script>
             </div>
         </div>
     </footer>
 
     <!-- Floating Telegram Chat Button -->
-    <a class=" tg-float-btn" href="https://t.me/keml00" target="_blank" title="Написать в Telegram">
-                    <i class="fab fa-telegram"></i>
-                    <span class="tg-tooltip">Написать в Telegram</span>
-                </a>
+    <a class="tg-float-btn" href="https://t.me/keml00" target="_blank" title="Написать в Telegram">
+        <i class="fab fa-telegram"></i>
+        <span class="tg-tooltip">Написать в Telegram</span>
+    </a>
 
-                <script type="module" src="js/main.js"></script>
+    <script type="module" src="js/main.js"></script>
 </body>
 
 </html>

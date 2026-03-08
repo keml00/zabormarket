@@ -1,15 +1,86 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9
+        http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd">
+
+    <!-- Главная страница -->
     <url>
         <loc>https://zabormarket.ru/</loc>
         <lastmod>2026-03-08</lastmod>
         <changefreq>weekly</changefreq>
         <priority>1.0</priority>
     </url>
+
+    <!-- Якорные ссылки на разделы каталога -->
     <url>
-        <loc>https://zabormarket.ru/admin.html</loc>
+        <loc>https://zabormarket.ru/#catalog</loc>
+        <lastmod>2026-03-08</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.9</priority>
+    </url>
+
+    <url>
+        <loc>https://zabormarket.ru/#gallery</loc>
         <lastmod>2026-03-08</lastmod>
         <changefreq>monthly</changefreq>
-        <priority>0.5</priority>
+        <priority>0.6</priority>
     </url>
+
+    <!-- Профнастил -->
+    <url>
+        <loc>https://zabormarket.ru/#profnastil</loc>
+        <lastmod>2026-03-08</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.85</priority>
+    </url>
+
+    <!-- Металлочерепица -->
+    <url>
+        <loc>https://zabormarket.ru/#metallocherepica</loc>
+        <lastmod>2026-03-08</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.85</priority>
+    </url>
+
+    <!-- Сайдинг -->
+    <url>
+        <loc>https://zabormarket.ru/#saiding</loc>
+        <lastmod>2026-03-08</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.80</priority>
+    </url>
+
+    <!-- Штакетник -->
+    <url>
+        <loc>https://zabormarket.ru/#shtaketnik</loc>
+        <lastmod>2026-03-08</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.80</priority>
+    </url>
+
+    <!-- Ламели -->
+    <url>
+        <loc>https://zabormarket.ru/#lameli</loc>
+        <lastmod>2026-03-08</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.75</priority>
+    </url>
+
+    <!-- ПСП / Софиты -->
+    <url>
+        <loc>https://zabormarket.ru/#psp_sofiti</loc>
+        <lastmod>2026-03-08</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.75</priority>
+    </url>
+
+    <!-- Доборные элементы -->
+    <url>
+        <loc>https://zabormarket.ru/#dobornie</loc>
+        <lastmod>2026-03-08</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.70</priority>
+    </url>
+
 </urlset>

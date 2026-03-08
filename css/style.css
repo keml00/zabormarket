@@ -748,6 +748,34 @@ input[type="number"]:focus {
     padding-top: 2rem;
 }
 
+.footer-counters {
+    margin-top: 1rem;
+    display: flex;
+    justify-content: center;
+}
+
+.visitor-counter {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.6rem;
+    font-size: 0.8rem;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    color: var(--text-secondary);
+}
+
+.visitor-counter__label {
+    color: var(--text-secondary);
+    font-weight: 500;
+}
+
+.visitor-counter__value {
+    color: var(--accent);
+    font-weight: 700;
+    font-size: 0.9rem;
+    font-family: 'Montserrat', sans-serif;
+}
+
 /* Responsive */
 @media (max-width: 900px) {
     .catalog-layout {
