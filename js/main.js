@@ -41,9 +41,62 @@ let currentConfig = { model: null, thickness: null, color: null, length: null };
 let cart = [];   // { id, name, model, thickness, color, length, qty, price }
 
 // ─── INIT ─────────────────────────────────────────────────────────
-function init() {
+async function init() {
+    await loadExcelPrices();
     renderCategories();
     attachCartEvents();
+}
+
+async function loadExcelPrices() {
+    try {
+        const response = await fetch('prices.xlsx');
+        if (!response.ok) throw new Error('Prices file not found');
+        const arrayBuffer = await response.arrayBuffer();
+
+        // This relies on the xlsx library loaded globally via CDN in index.html
+        if (typeof XLSX === 'undefined') {
+            console.error('XLSX library is not loaded');
+            return;
+        }
+
+        const wb = XLSX.read(arrayBuffer, { type: 'array' });
+        const ws = wb.Sheets[wb.SheetNames[0]];
+        const rows = XLSX.utils.sheet_to_json(ws, { header: 1 });
+
+        // Find header row
+        let headerRow = 0;
+        for (let i = 0; i < rows.length; i++) {
+            if (rows[i].some(c => String(c).toLowerCase().includes('category') || String(c).toLowerCase().includes('категор'))) {
+                headerRow = i; break;
+            }
+        }
+
+        const headers = rows[headerRow].map(h => String(h).toLowerCase().trim());
+        const ci = headers.findIndex(h => h.includes('category') || h.includes('категор'));
+        const mi = headers.findIndex(h => h.includes('model') || h.includes('модел'));
+        const ti = headers.findIndex(h => h.includes('thick') || h.includes('толщ'));
+        const coli = headers.findIndex(h => h.includes('color') || h.includes('цвет'));
+        const pi = headers.findIndex(h => h.includes('price') || h.includes('цена'));
+
+        if (pi === -1) return;
+
+        const pricesMap = {};
+        for (let i = headerRow + 1; i < rows.length; i++) {
+            const row = rows[i];
+            if (!row || !row[pi]) continue;
+            const cat = ci >= 0 ? String(row[ci] || '').trim() : '';
+            const model = mi >= 0 ? String(row[mi] || '').trim() : '';
+            const thick = ti >= 0 ? String(row[ti] || '').trim() : '';
+            const color = coli >= 0 ? String(row[coli] || '').trim() : '';
+            const price = parseFloat(row[pi]) || 0;
+            const key = color ? `${cat}|${model}|${thick}|${color}` : `${cat}|${model}|${thick}`;
+            pricesMap[key] = price;
+        }
+
+        window.excelPrices = pricesMap;
+    } catch (err) {
+        console.error('Failed to load prices.xlsx:', err);
+    }
 }
 
 // ─── CATEGORIES ───────────────────────────────────────────────────
@@ -281,10 +334,10 @@ function handleLength() {
 // ─── PRICE ────────────────────────────────────────────────────────
 function getBasePrice() {
     try {
-        const store = JSON.parse(localStorage.getItem('stroymetal_prices') || 'null');
+        const store = window.excelPrices;
         if (!currentCategory || !currentConfig.model) return null;
 
-        // 1. Try localStorage override from Admin panel
+        // 1. Try override from newly loaded excel prices map
         const baseKey = `${currentCategory.id}|${currentConfig.model.id}|${currentConfig.thickness || ''}`;
         const colorKey = currentConfig.color ? `${baseKey}|${currentConfig.color}` : baseKey;
 
@@ -298,16 +351,13 @@ function getBasePrice() {
         // 2. Fallback to prices.js static file
         return prices[currentConfig.model.id] ?? null;
     } catch {
-        // Fallback to prices.js if storage fails
+        // Fallback to prices.js if map fails
         return currentConfig.model ? prices[currentConfig.model.id] : null;
     }
 }
 
 function getEffectivePrice() {
-    const base = getBasePrice();
-    if (base === null) return null;
-    const markup = parseFloat(localStorage.getItem(`markup_${currentCategory.id}`) || '0');
-    return base * (1 + markup / 100);
+    return getBasePrice();
 }
 
 function renderPrice() {
