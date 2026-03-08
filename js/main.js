@@ -239,8 +239,9 @@ async function loadCustomerGallery() {
 
 async function checkCustomPhoto(modelId, colorCode) {
     if (!modelId || !colorCode) return null;
-    // Check for img/products/[modelId]/[colorCode]/1.jpg
-    const customPath = `img/products/${modelId}/${colorCode}/1.jpg`;
+    // Standardize color folder name: RAL 7024 -> RAL_7024
+    const cleanColor = colorCode.trim().replace(/\s+/g, '_');
+    const customPath = `img/products/${modelId}/${cleanColor}/1.jpg`;
     return new Promise((resolve) => {
         const img = new Image();
         img.onload = () => resolve(customPath);
