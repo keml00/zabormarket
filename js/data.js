@@ -156,7 +156,7 @@ export const products = [
                 name: 'Евро жалюзи',
                 totalWidth: 115,
                 workingWidth: 115,
-                image: 'img/evrozhaluzi_main.jpg',
+                image: 'https://centermk.ru/upload/iblock/c34/10000787_ral3005_krasnoe_vino.jpg',
                 colorImages: {
                     'RAL 3005': 'https://centermk.ru/upload/iblock/c34/10000787_ral3005_krasnoe_vino.jpg',
                     'RAL 6005': 'https://centermk.ru/upload/iblock/c2d/10000781_ral6005_zelenyj_moh.jpg',

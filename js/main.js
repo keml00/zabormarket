@@ -45,6 +45,8 @@ async function init() {
     await loadExcelPrices();
     renderCategories();
     attachCartEvents();
+    loadCustomerGallery();
+    initHoverZoom();
 }
 
 async function loadExcelPrices() {
@@ -210,7 +212,58 @@ function setActiveModel(modelObj) {
     renderSpecs(); renderCoatings(); renderPrice();
 }
 
-function setImage(src) { configImage.src = src; }
+function setImage(src) {
+    configImage.src = src;
+    // Reset zoom on image change
+    configImage.style.transform = 'scale(1)';
+}
+
+async function loadCustomerGallery() {
+    const galleryContainer = document.getElementById('customerGallery');
+    if (!galleryContainer) return;
+
+    // Try to load up to 12 images named 1.jpg, 2.jpg... from img/gallery/customers
+    for (let i = 1; i <= 12; i++) {
+        const imgPath = `img/gallery/customers/${i}.jpg`;
+        const img = new Image();
+        img.onload = () => {
+            const item = document.createElement('div');
+            item.className = 'gallery-item';
+            item.innerHTML = `<img src="${imgPath}" alt="Наши работы ${i}">`;
+            item.onclick = () => window.open(imgPath, '_blank');
+            galleryContainer.appendChild(item);
+        };
+        img.src = imgPath;
+    }
+}
+
+async function checkCustomPhoto(modelId, colorCode) {
+    if (!modelId || !colorCode) return null;
+    // Check for img/products/[modelId]/[colorCode]/1.jpg
+    const customPath = `img/products/${modelId}/${colorCode}/1.jpg`;
+    return new Promise((resolve) => {
+        const img = new Image();
+        img.onload = () => resolve(customPath);
+        img.onerror = () => resolve(null);
+        img.src = customPath;
+    });
+}
+
+function initHoverZoom() {
+    const wrapper = document.querySelector('.config-image-wrapper');
+    if (!wrapper) return;
+
+    wrapper.addEventListener('mousemove', (e) => {
+        const { left, top, width, height } = wrapper.getBoundingClientRect();
+        const x = ((e.pageX - left) / width) * 100;
+        const y = ((e.pageY - top) / height) * 100;
+        configImage.style.transformOrigin = `${x}% ${y}%`;
+    });
+
+    wrapper.addEventListener('mouseleave', () => {
+        configImage.style.transform = 'scale(1)';
+    });
+}
 
 async function updateLogo(categoryId) {
     if (!dynamicLogo) return;
@@ -231,14 +284,14 @@ async function updateLogo(categoryId) {
         if (currentConfig.color) {
             const hex = colors.main.find(c => c.code === currentConfig.color)?.hex ||
                 colors.additional.find(c => c.code === currentConfig.color)?.hex;
-            if (hex) applyColorToLogo(hex, currentConfig.color);
+            if (hex) await applyColorToLogo(hex, currentConfig.color);
         }
     } catch (err) {
         console.error('Error loading SVG logo:', err);
     }
 }
 
-function applyColorToLogo(hex, colorCode) {
+async function applyColorToLogo(hex, colorCode) {
     const svg = dynamicLogo.querySelector('svg');
     if (svg) {
         svg.style.transition = 'fill 0.3s ease';
@@ -247,8 +300,17 @@ function applyColorToLogo(hex, colorCode) {
         svg.querySelectorAll('[fill]').forEach(el => el.style.fill = hex);
     }
 
-    // Update main image if color-specific image exists
     const model = currentConfig.model;
+    if (!model) return;
+
+    // 1. Try custom folder-based photo first
+    const customPhoto = await checkCustomPhoto(model.id, colorCode);
+    if (customPhoto) {
+        setImage(customPhoto);
+        return;
+    }
+
+    // 2. Try hardcoded colorImages
     if (model && model.colorImages && model.colorImages[colorCode]) {
         setImage(model.colorImages[colorCode]);
     } else if (model) {

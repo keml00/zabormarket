@@ -125,7 +125,7 @@
                 <div id="productConfigurator" class="configurator-container glass-panel hidden">
                     <!-- Header -->
                     <div class="config-header">
-                        <div class="config-image-container">
+                        <div class="config-image-wrapper">
                             <img id="configImage" src="" alt="Выбранный строительный материал" class="config-img">
                             <div id="dynamicLogo" class="dynamic-logo"></div>
                         </div>
@@ -232,6 +232,17 @@
         </div>
     </section>
 
+    <!-- Customer Gallery Section -->
+    <section class="gallery-section" id="gallery">
+        <div class="container">
+            <h2 class="section-title">Наши работы</h2>
+            <p class="section-subtitle">Фотографии готовых объектов от наших клиентов</p>
+            <div class="gallery-grid" id="customerGallery">
+                <!-- Dynamically populated by main.js -->
+            </div>
+        </div>
+    </section>
+
     <!-- Footer -->
     <footer class="site-footer">
         <div class="container footer-content">
@@ -255,13 +266,20 @@
         </div>
         <div class="footer-bottom">
             <p>&copy; 2026 ЗаборМаркет. Все права защищены.</p>
-            <!-- LiveInternet counter -->
-            <a href="https://www.liveinternet.ru/click" target="_blank"><img id="licnt1B24" width="88" height="31"
-                    style="border:0; margin-top:10px;"
-                    title="LiveInternet: показано число просмотров и посетителей за 24 часа"
-                    src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAEALAAAAAABAAEAAAIBTAA7" alt="" /></a>
-            <script>(function (d, s) { d.getElementById("licnt1B24").src = "https://counter.yadro.ru/hit?t52.6;r" + escape(d.referrer) + ((typeof (s) == "undefined") ? "" : ";s" + s.width + "*" + s.height + "*" + (s.colorDepth ? s.colorDepth : s.pixelDepth)) + ";u" + escape(d.URL) + ";h" + escape(d.title.substring(0, 150)) + ";" + Math.random() })(document, screen)</script>
-            <!--/LiveInternet-->
+            <div class="footer-counters">
+                <!-- LiveInternet counter -->
+                <script>
+                    document.write("<a href='https://www.liveinternet.ru/click' " +
+                        "target=_blank><img src='https://counter.yadro.ru/hit?t52.6;r" +
+                        escape(document.referrer) + ((typeof (screen) == "undefined") ? "" :
+                            ";s" + screen.width + "*" + screen.height + "*" + (screen.colorDepth ?
+                                screen.colorDepth : screen.pixelDepth)) + ";u" + escape(document.URL) +
+                        ";" + Math.random() +
+                        "' alt='' title='LiveInternet: показано число просмотров и посетителей за 24 часа' " +
+                        "border='0' width='88' height='31'><\/a>")
+                </script>
+                <!--/LiveInternet-->
+            </div>
         </div>
     </footer>
 
