@@ -265,10 +265,11 @@
             <p>Заполните шаблон и загрузите файл. Цены обновятся на сайте мгновенно.</p>
             <div class="tpl-info">
                 Формат таблицы в Excel:<br><br>
-                <code>category</code> | <code>model</code> | <code>thickness</code> | <code>price</code><br><br>
+                <code>category</code> | <code>model</code> | <code>thickness</code> | <code>color</code> |
+                <code>price</code><br><br>
                 Пример:<br>
-                profnastil | S-8 | 0.45 | 650<br>
-                saiding | korabelnaya | 0.45 | 780
+                profnastil | S-8 | 0.45 | Цинк | 650<br>
+                saiding | korabelnaya | 0.45 | | 780
             </div>
             <label>Выберите .xlsx файл:</label>
             <input type="file" id="excelFile" accept=".xlsx,.xls">
@@ -349,6 +350,7 @@
                     const ci = headers.findIndex(h => h.includes('category') || h.includes('категор'));
                     const mi = headers.findIndex(h => h.includes('model') || h.includes('модел'));
                     const ti = headers.findIndex(h => h.includes('thick') || h.includes('толщ'));
+                    const coli = headers.findIndex(h => h.includes('color') || h.includes('цвет'));
                     const pi = headers.findIndex(h => h.includes('price') || h.includes('цена'));
 
                     if (pi === -1) { throw new Error('Не найдена колонка цены (price / цена)'); }
@@ -361,10 +363,11 @@
                         const cat = ci >= 0 ? String(row[ci] || '').trim() : '';
                         const model = mi >= 0 ? String(row[mi] || '').trim() : '';
                         const thick = ti >= 0 ? String(row[ti] || '').trim() : '';
+                        const color = coli >= 0 ? String(row[coli] || '').trim() : '';
                         const price = parseFloat(row[pi]) || 0;
-                        const key = `${cat}|${model}|${thick}`;
+                        const key = color ? `${cat}|${model}|${thick}|${color}` : `${cat}|${model}|${thick}`;
                         prices[key] = price;
-                        tableRows.push({ cat, model, thick, price, key });
+                        tableRows.push({ cat, model, thick, color, price, key });
                     }
 
                     localStorage.setItem('stroymetal_prices', JSON.stringify(prices));
@@ -383,8 +386,8 @@
             const wrap = document.getElementById('priceTableWrap');
             if (rows.length === 0) { wrap.innerHTML = ''; return; }
             wrap.innerHTML = `<table>
-        <tr><th>Категория</th><th>Модель</th><th>Толщина</th><th>Цена (₽/м²)</th></tr>
-        ${rows.map(r => `<tr><td>${r.cat}</td><td>${r.model}</td><td>${r.thick}</td><td><input type="number" value="${r.price}" onchange="updatePrice('${r.key}', this.value)"></td></tr>`).join('')}
+        <tr><th>Категория</th><th>Модель</th><th>Толщина</th><th>Цвет</th><th>Цена (₽/м²)</th></tr>
+        ${rows.map(r => `<tr><td>${r.cat}</td><td>${r.model}</td><td>${r.thick}</td><td>${r.color}</td><td><input type="number" value="${r.price}" onchange="updatePrice('${r.key}', this.value)"></td></tr>`).join('')}
     </table>`;
         }
 
@@ -399,44 +402,45 @@
         // ── Template Download ────────────────────────────────────────
         function downloadTemplate() {
             const data = [
-                ['category', 'model', 'thickness', 'price'],
-                ['profnastil', 'S-8', '0.35', 580],
-                ['profnastil', 'S-8', '0.45', 650],
-                ['profnastil', 'S-8', '0.5', 720],
-                ['profnastil', 'S-8', '0.65', 890],
-                ['profnastil', 'NS-10', '0.35', 590],
-                ['profnastil', 'NS-10', '0.45', 660],
-                ['profnastil', 'NS-10', '0.5', 730],
-                ['profnastil', 'NS-10', '0.65', 900],
-                ['profnastil', 'NS-20', '0.35', 600],
-                ['profnastil', 'NS-20', '0.45', 670],
-                ['profnastil', 'NS-20', '0.5', 740],
-                ['profnastil', 'NS-20', '0.65', 910],
-                ['profnastil', 'S-21', '0.35', 610],
-                ['profnastil', 'S-21', '0.45', 680],
-                ['profnastil', 'S-21', '0.5', 750],
-                ['profnastil', 'NS-21', '0.45', 690],
-                ['profnastil', 'NS-35', '0.45', 710],
-                ['profnastil', 'S-44', '0.45', 730],
-                ['profnastil', 'N-60', '0.45', 760],
-                ['profnastil', 'N-75', '0.45', 790],
-                ['metallocherepica', 'monterej', '0.45', 720],
-                ['metallocherepica', 'monterej', '0.5', 800],
-                ['saiding', 'korabelnaya', '0.45', 760],
-                ['saiding', 'evrobrus', '0.45', 770],
-                ['saiding', 'blokkhaus', '0.45', 780],
-                ['saiding', 'brevno4d', '0.45', 790],
-                ['shtaketnik', 'uzkiy', '0.45', 500],
-                ['shtaketnik', 'polukrugly', '0.45', 520],
-                ['shtaketnik', 'figurny', '0.45', 530],
-                ['shtaketnik', 'shirokiy', '0.45', 540],
-                ['shtaketnik', 'pletenka', '0.45', 560],
-                ['lameli', 'evrozhaluzi', '0.45', 850],
-                ['dobornie', 'individual', '0.45', 700],
-                ['dobornie', 'individual', '0.5', 770],
+                ['category', 'model', 'thickness', 'color', 'price'],
+                ['profnastil', 'S-8', '0.35', '', 580],
+                ['profnastil', 'S-8', '0.45', '', 650],
+                ['profnastil', 'S-8', '0.45', 'Цинк', 610],
+                ['profnastil', 'S-8', '0.5', '', 720],
+                ['profnastil', 'S-8', '0.65', '', 890],
+                ['profnastil', 'NS-10', '0.35', '', 590],
+                ['profnastil', 'NS-10', '0.45', '', 660],
+                ['profnastil', 'NS-10', '0.5', '', 730],
+                ['profnastil', 'NS-10', '0.65', '', 900],
+                ['profnastil', 'NS-20', '0.35', '', 600],
+                ['profnastil', 'NS-20', '0.45', '', 670],
+                ['profnastil', 'NS-20', '0.5', '', 740],
+                ['profnastil', 'NS-20', '0.65', '', 910],
+                ['profnastil', 'S-21', '0.35', '', 610],
+                ['profnastil', 'S-21', '0.45', '', 680],
+                ['profnastil', 'S-21', '0.5', '', 750],
+                ['profnastil', 'NS-21', '0.45', '', 690],
+                ['profnastil', 'NS-35', '0.45', '', 710],
+                ['profnastil', 'S-44', '0.45', '', 730],
+                ['profnastil', 'N-60', '0.45', '', 760],
+                ['profnastil', 'N-75', '0.45', '', 790],
+                ['metallocherepica', 'monterej', '0.45', '', 720],
+                ['metallocherepica', 'monterej', '0.5', '', 800],
+                ['saiding', 'korabelnaya', '0.45', '', 760],
+                ['saiding', 'evrobrus', '0.45', '', 770],
+                ['saiding', 'blokkhaus', '0.45', '', 780],
+                ['saiding', 'brevno4d', '0.45', '', 790],
+                ['shtaketnik', 'uzkiy', '0.45', '', 500],
+                ['shtaketnik', 'polukrugly', '0.45', '', 520],
+                ['shtaketnik', 'figurny', '0.45', '', 530],
+                ['shtaketnik', 'shirokiy', '0.45', '', 540],
+                ['shtaketnik', 'pletenka', '0.45', '', 560],
+                ['lameli', 'evrozhaluzi', '0.45', '', 850],
+                ['dobornie', 'individual', '0.45', '', 700],
+                ['dobornie', 'individual', '0.5', '', 770],
             ];
             const ws = XLSX.utils.aoa_to_sheet(data);
-            ws['!cols'] = [{ wch: 20 }, { wch: 18 }, { wch: 10 }, { wch: 12 }];
+            ws['!cols'] = [{ wch: 20 }, { wch: 18 }, { wch: 10 }, { wch: 12 }, { wch: 12 }];
             const wb = XLSX.utils.book_new();
             XLSX.utils.book_append_sheet(wb, ws, 'Прайс');
             XLSX.writeFile(wb, 'stroymetal_prices.xlsx');
@@ -450,8 +454,12 @@
             try {
                 const p = JSON.parse(savedPrices);
                 const rows = Object.entries(p).map(([key, price]) => {
-                    const [cat, model, thick] = key.split('|');
-                    return { cat, model, thick, price, key };
+                    const parts = key.split('|');
+                    const cat = parts[0] || '';
+                    const model = parts[1] || '';
+                    const thick = parts[2] || '';
+                    const color = parts[3] || '';
+                    return { cat, model, thick, color, price, key };
                 });
                 renderTable(rows);
             } catch { }

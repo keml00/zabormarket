@@ -285,8 +285,15 @@ function getBasePrice() {
         if (!currentCategory || !currentConfig.model) return null;
 
         // 1. Try localStorage override from Admin panel
-        const key = `${currentCategory.id}|${currentConfig.model.id}|${currentConfig.thickness || ''}`;
-        if (store && store[key] !== undefined) return store[key];
+        const baseKey = `${currentCategory.id}|${currentConfig.model.id}|${currentConfig.thickness || ''}`;
+        const colorKey = currentConfig.color ? `${baseKey}|${currentConfig.color}` : baseKey;
+
+        if (store) {
+            // Check specific color price first
+            if (currentConfig.color && store[colorKey] !== undefined) return store[colorKey];
+            // Fallback to general model+thickness price
+            if (store[baseKey] !== undefined) return store[baseKey];
+        }
 
         // 2. Fallback to prices.js static file
         return prices[currentConfig.model.id] ?? null;

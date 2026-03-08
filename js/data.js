@@ -5,7 +5,8 @@ export const colors = {
         { code: 'RAL 7024', hex: '#474A51', name: 'Серый графит' },
         { code: 'RAL 8004', hex: '#8E402A', name: 'Медно-коричневый' },
         { code: 'RAL 8017', hex: '#442F29', name: 'Шоколадно-коричневый' },
-        { code: 'RAL 2004', hex: '#E75B12', name: 'Оранжевый (апельсин)' }
+        { code: 'RAL 2004', hex: '#E75B12', name: 'Оранжевый (апельсин)' },
+        { code: 'Цинк', hex: '#E2E8F0', name: 'Оцинкованный' }
     ],
     additional: [
         { code: 'RAL 9005', hex: '#0A0A0A', name: 'Чёрный' },
