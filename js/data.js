@@ -1,6 +1,5 @@
 export const colors = {
     main: [
-        { code: 'RAL 1014', hex: '#E1CCAE', name: 'Слоновая кость (Бежевый)' },
         { code: 'RAL 3005', hex: '#5B1E31', name: 'Красное вино' },
         { code: 'RAL 6005', hex: '#114232', name: 'Зелёный мох' },
         { code: 'RAL 7024', hex: '#474A51', name: 'Серый графит' },
@@ -58,7 +57,6 @@ export const products = [
                 thicknesses: ['0.35', '0.45', '0.5', '0.65'],
                 image: 'https://centermk.ru/upload/iblock/f2b/plii54ftzr7cbxre37lhf0h0qv38lpcc/Profnastil-S_8-proizvodstva-TPK-TSentr-Metallokrovli.png',
                 colorImages: {
-                    'RAL 1014': 'https://centermk.ru/upload/iblock/ee9/4m40pu1xc68ux4c36jhf2mpv8j309raq.jpg',
                     'RAL 3005': 'https://centermk.ru/upload/iblock/762/mgb3hvzp4rkvnctcmcbky9o6dsfiwpyw/onn5b3oumfkhrd5o7ngzq6ms1mvdy0mp.jpg',
                     'RAL 6005': 'https://centermk.ru/upload/iblock/89e/89e670ce8c46558bfec1cf06bf418567.jpg',
                     'RAL 7024': 'https://centermk.ru/upload/iblock/cfe/28ah4skw1dlf4bgkbruq204e6ftqc5xe/wrhimd5pelmvbc4r8uxtwik6o9ww1pea.jpg',
