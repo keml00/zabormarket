@@ -1,12 +1,13 @@
 export const colors = {
     main: [
+        { code: 'RAL 1014', hex: '#E1CCAE', name: 'Слоновая кость (Бежевый)' },
         { code: 'RAL 3005', hex: '#5B1E31', name: 'Красное вино' },
         { code: 'RAL 6005', hex: '#114232', name: 'Зелёный мох' },
         { code: 'RAL 7024', hex: '#474A51', name: 'Серый графит' },
         { code: 'RAL 8004', hex: '#8E402A', name: 'Медно-коричневый' },
         { code: 'RAL 8017', hex: '#442F29', name: 'Шоколадно-коричневый' },
         { code: 'RAL 2004', hex: '#E75B12', name: 'Оранжевый (апельсин)' },
-        { code: 'Цинк', hex: '#E2E8F0', name: 'Оцинкованный' }
+        { code: 'Цинк', hex: '#B0BEC5', name: 'Оцинкованный', border: '#78909C' }
     ],
     additional: [
         { code: 'RAL 9005', hex: '#0A0A0A', name: 'Чёрный' },
@@ -49,25 +50,45 @@ export const products = [
         name: 'Профнастил',
         description: 'Стеновой и кровельный профнастил',
         image: IMG.profnastil,
-        thicknesses: ['0.35', '0.45', '0.5', '0.65'],
+        thicknesses: ['0.45', '0.5', '0.65'],
         customLength: true,
         models: [
             {
-                id: 'S-8', name: 'С-8', totalWidth: 1190, workingWidth: 1150, image: 'https://centermk.ru/upload/iblock/f2b/plii54ftzr7cbxre37lhf0h0qv38lpcc/Profnastil-S_8-proizvodstva-TPK-TSentr-Metallokrovli.png',
+                id: 'S-8', name: 'С-8', totalWidth: 1190, workingWidth: 1150,
+                thicknesses: ['0.35', '0.45', '0.5', '0.65'],
+                image: 'https://centermk.ru/upload/iblock/f2b/plii54ftzr7cbxre37lhf0h0qv38lpcc/Profnastil-S_8-proizvodstva-TPK-TSentr-Metallokrovli.png',
                 colorImages: {
-                    'RAL 3005': 'https://centermk.ru/upload/iblock/58c/419clqsw14jxt379k78c7l5r52s2stcl.jpg',
-                    'RAL 6005': 'https://centermk.ru/upload/iblock/638/u9ic9zay2t091i5x1qixwmsxaym984o7.jpg',
-                    'RAL 7024': 'https://centermk.ru/upload/iblock/66e/x1giyuj1f88i8z0o1t3d4pzhptm3a01q.jpg'
+                    'RAL 1014': 'https://centermk.ru/upload/iblock/ee9/4m40pu1xc68ux4c36jhf2mpv8j309raq.jpg',
+                    'RAL 3005': 'https://centermk.ru/upload/iblock/762/mgb3hvzp4rkvnctcmcbky9o6dsfiwpyw/onn5b3oumfkhrd5o7ngzq6ms1mvdy0mp.jpg',
+                    'RAL 6005': 'https://centermk.ru/upload/iblock/89e/89e670ce8c46558bfec1cf06bf418567.jpg',
+                    'RAL 7024': 'https://centermk.ru/upload/iblock/cfe/28ah4skw1dlf4bgkbruq204e6ftqc5xe/wrhimd5pelmvbc4r8uxtwik6o9ww1pea.jpg',
+                    'RAL 8004': 'https://centermk.ru/upload/iblock/af0/p5ll8nghumnz6jfv2s0lr0nyqyp6o8yu/4m40pu1xc68ux4c36jhf2mpv8j309raq.jpg',
+                    'RAL 8017': 'https://centermk.ru/upload/iblock/af0/p5ll8nghumnz6jfv2s0lr0nyqyp6o8yu/4m40pu1xc68ux4c36jhf2mpv8j309raq.jpg',
+                    'RAL 2004': 'https://centermk.ru/upload/iblock/ee9/4m40pu1xc68ux4c36jhf2mpv8j309raq.jpg',
+                    'RAL 9003': 'https://centermk.ru/upload/iblock/bbb/60oxue11l27fjuy1cvq1qrb0abqtshab/h43d4v40m55zu72tx60zdzf1k5nen0b4.jpg',
+                    'RAL 9010': 'https://centermk.ru/upload/iblock/bbb/60oxue11l27fjuy1cvq1qrb0abqtshab/h43d4v40m55zu72tx60zdzf1k5nen0b4.jpg',
+                    'Цинк': 'https://centermk.ru/upload/uf/aef/2gqfhrv3yd4axagdcm1wz0yev2mi4hv1.jpg'
                 }
             },
-            { id: 'NS-10', name: 'НС-10', totalWidth: 1190, workingWidth: 1150, image: 'https://centermk.ru/upload/iblock/8d6/lnhj7es0mmfj0pvvy118eq8rzjtd208d/Profnastil-NS_10-proizvodstva-TPK-TSentr-Metallokrovli.png' },
-            { id: 'NS-20', name: 'НС-20', totalWidth: 1150, workingWidth: 1100, image: 'https://centermk.ru/upload/iblock/e34/4q9xk24m8ggs32odb77x233mjn03mj0q/Profnastil-NS_20-proizvodstva-TPK-TSentr-Metallokrovli.png' },
-            { id: 'S-21', name: 'С-21', totalWidth: 1051, workingWidth: 1000, image: 'https://centermk.ru/upload/iblock/2dd/eksr0xn4wz7dd18dqrtff9oqrm42b0pi/Profnastil-S_21-proizvodstva-TPK-TSentr-Metallokrovli.png' },
-            { id: 'NS-21', name: 'НС-21', totalWidth: 1051, workingWidth: 1000, image: 'https://centermk.ru/upload/iblock/24e/ra530bxkble35u9biegg653urotlbjr0/Profnastil-NS_21A-proizvodstva-TPK-TSentr-Metallokrovli.png' },
-            { id: 'NS-35', name: 'НС-35', totalWidth: 1075, workingWidth: 1000, image: 'https://centermk.ru/upload/iblock/50f/a60db6l8dwd0527e6isp13qj2rpvrm9s/Profnastil-NS_35-proizvodstva-TPK-TSentr-Metallokrovli.png' },
-            { id: 'S-44', name: 'С-44', totalWidth: 1047, workingWidth: 1000, image: 'https://centermk.ru/upload/iblock/ecb/44lviic2772b82c4rfs9is9kg7siquwq/Profnastil-S_44-proizvodstva-TPK-TSentr-Metallokrovli.png' },
-            { id: 'N-60', name: 'Н-60', totalWidth: 1000, workingWidth: 900, image: 'https://centermk.ru/upload/iblock/cbb/jnw1pgc0lvtigqaw3f67979mhkwv4nb6/Profnastil-N_60-proizvodstva-TSentr-Metallokrovli.png' },
-            { id: 'N-75', name: 'Н-75', totalWidth: 1000, workingWidth: 750, image: 'https://centermk.ru/upload/iblock/624/blxgv9s2fc61qjvi0wprsel32jgz9uff/Profnastil-N_75-proizvodstva-TSentr-Metallokrovli.png' },
+            {
+                id: 'NS-10', name: 'НС-10', totalWidth: 1190, workingWidth: 1150,
+                thicknesses: ['0.35', '0.45', '0.5', '0.65'],
+                image: 'https://centermk.ru/upload/iblock/8d6/lnhj7es0mmfj0pvvy118eq8rzjtd208d/Profnastil-NS_10-proizvodstva-TPK-TSentr-Metallokrovli.png',
+                colorImages: {
+                    'RAL 6005': 'https://centermk.ru/upload/iblock/638/u9ic9zay2t091i5x1qixwmsxaym984o7.jpg',
+                    'RAL 7024': 'https://centermk.ru/upload/iblock/66e/x1giyuj1f88i8z0o1t3d4pzhptm3a01q.jpg',
+                    'RAL 8004': 'https://centermk.ru/upload/iblock/af0/p5ll8nghumnz6jfv2s0lr0nyqyp6o8yu/4m40pu1xc68ux4c36jhf2mpv8j309raq.jpg',
+                    'RAL 8017': 'https://centermk.ru/upload/iblock/af0/p5ll8nghumnz6jfv2s0lr0nyqyp6o8yu/4m40pu1xc68ux4c36jhf2mpv8j309raq.jpg',
+                    'Цинк': 'https://centermk.ru/upload/uf/aef/2gqfhrv3yd4axagdcm1wz0yev2mi4hv1.jpg'
+                }
+            },
+            { id: 'NS-20', name: 'НС-20', totalWidth: 1150, workingWidth: 1100, thicknesses: ['0.45', '0.5', '0.65'], image: 'https://centermk.ru/upload/iblock/e34/4q9xk24m8ggs32odb77x233mjn03mj0q/Profnastil-NS_20-proizvodstva-TPK-TSentr-Metallokrovli.png', colorImages: { 'RAL 6005': 'https://centermk.ru/upload/iblock/638/u9ic9zay2t091i5x1qixwmsxaym984o7.jpg', 'RAL 7024': 'https://centermk.ru/upload/iblock/66e/x1giyuj1f88i8z0o1t3d4pzhptm3a01q.jpg', 'RAL 8017': 'https://centermk.ru/upload/iblock/af0/p5ll8nghumnz6jfv2s0lr0nyqyp6o8yu/4m40pu1xc68ux4c36jhf2mpv8j309raq.jpg' } },
+            { id: 'S-21', name: 'С-21', totalWidth: 1051, workingWidth: 1000, thicknesses: ['0.45', '0.5', '0.65'], image: 'https://centermk.ru/upload/iblock/2dd/eksr0xn4wz7dd18dqrtff9oqrm42b0pi/Profnastil-S_21-proizvodstva-TPK-TSentr-Metallokrovli.png', colorImages: { 'RAL 6005': 'https://centermk.ru/upload/iblock/638/u9ic9zay2t091i5x1qixwmsxaym984o7.jpg', 'RAL 7024': 'https://centermk.ru/upload/iblock/66e/x1giyuj1f88i8z0o1t3d4pzhptm3a01q.jpg' } },
+            { id: 'NS-21', name: 'НС-21', totalWidth: 1051, workingWidth: 1000, thicknesses: ['0.45', '0.5', '0.65'], image: 'https://centermk.ru/upload/iblock/24e/ra530bxkble35u9biegg653urotlbjr0/Profnastil-NS_21A-proizvodstva-TPK-TSentr-Metallokrovli.png', colorImages: { 'RAL 7024': 'https://centermk.ru/upload/iblock/66e/x1giyuj1f88i8z0o1t3d4pzhptm3a01q.jpg' } },
+            { id: 'NS-35', name: 'НС-35', totalWidth: 1075, workingWidth: 1000, thicknesses: ['0.45', '0.5', '0.65'], image: 'https://centermk.ru/upload/iblock/50f/a60db6l8dwd0527e6isp13qj2rpvrm9s/Profnastil-NS_35-proizvodstva-TPK-TSentr-Metallokrovli.png', colorImages: { 'RAL 6005': 'https://centermk.ru/upload/iblock/638/u9ic9zay2t091i5x1qixwmsxaym984o7.jpg', 'RAL 7024': 'https://centermk.ru/upload/iblock/66e/x1giyuj1f88i8z0o1t3d4pzhptm3a01q.jpg' } },
+            { id: 'S-44', name: 'С-44', totalWidth: 1047, workingWidth: 1000, thicknesses: ['0.45', '0.5', '0.65'], image: 'https://centermk.ru/upload/iblock/ecb/44lviic2772b82c4rfs9is9kg7siquwq/Profnastil-S_44-proizvodstva-TPK-TSentr-Metallokrovli.png', colorImages: { 'RAL 7024': 'https://centermk.ru/upload/iblock/66e/x1giyuj1f88i8z0o1t3d4pzhptm3a01q.jpg' } },
+            { id: 'N-60', name: 'Н-60', totalWidth: 1000, workingWidth: 900, thicknesses: ['0.45', '0.5', '0.65'], image: 'https://centermk.ru/upload/iblock/cbb/jnw1pgc0lvtigqaw3f67979mhkwv4nb6/Profnastil-N_60-proizvodstva-TSentr-Metallokrovli.png', colorImages: { 'RAL 7024': 'https://centermk.ru/upload/iblock/66e/x1giyuj1f88i8z0o1t3d4pzhptm3a01q.jpg' } },
+            { id: 'N-75', name: 'Н-75', totalWidth: 1000, workingWidth: 750, thicknesses: ['0.45', '0.5', '0.65'], image: 'https://centermk.ru/upload/iblock/624/blxgv9s2fc61qjvi0wprsel32jgz9uff/Profnastil-N_75-proizvodstva-TSentr-Metallokrovli.png', colorImages: { 'RAL 7024': 'https://centermk.ru/upload/iblock/66e/x1giyuj1f88i8z0o1t3d4pzhptm3a01q.jpg' } },
         ]
     },
     {
@@ -75,7 +96,7 @@ export const products = [
         name: 'Металлочерепица',
         description: 'Классическая и надёжная кровля',
         image: IMG.metallocherepica,
-        thicknesses: ['0.45', '0.5'],
+        thicknesses: ['0.45', '0.5', '0.65'],
         customLength: true,
         models: [
             {
@@ -87,7 +108,10 @@ export const products = [
                 colorImages: {
                     'RAL 3005': 'https://centermk.ru/upload/iblock/0c4/a8y91co9665tk01p6iqbzbrcl38tgwxc.jpg',
                     'RAL 6005': 'https://centermk.ru/upload/iblock/24a/a2795z65pb007xu3unps9wv0lmx9o4cv.jpg',
-                    'RAL 7024': 'https://centermk.ru/upload/iblock/c50/4sj5uf8spp0jargs3m2eaaijwoxkrsl8.jpg'
+                    'RAL 7024': 'https://centermk.ru/upload/iblock/c50/4sj5uf8spp0jargs3m2eaaijwoxkrsl8.jpg',
+                    'RAL 8017': 'https://centermk.ru/upload/resize_cache/iblock/af0/p5ll8nghumnz6jfv2s0lr0nyqyp6o8yu/400_400_140cd750bba9870f18aada2478b24840a/4m40pu1xc68ux4c36jhf2mpv8j309raq.jpg',
+                    'RAL 9003': 'https://centermk.ru/upload/resize_cache/iblock/4f4/b9x82e8eq9z6u4sttx2phf88ljbk5jwl/400_400_140cd750bba9870f18aada2478b24840a/el4pqd4mzenvzzazpxvuy7mffp4l72xq.jpg',
+                    'RAL 8004': 'https://centermk.ru/upload/resize_cache/iblock/b90/xgirrru47yizz000v1j6712b126redv9/400_400_140cd750bba9870f18aada2478b24840a/jvayzmpwomj966wud61oevkokfoya34c.jpg'
                 }
             }
         ]
@@ -97,7 +121,7 @@ export const products = [
         name: 'Сайдинг',
         description: 'Металлический сайдинг для фасада',
         image: IMG.saiding,
-        thicknesses: ['0.45'],
+        thicknesses: ['0.45', '0.5', '0.65'],
         customLength: true,
         models: [
             {
@@ -108,8 +132,8 @@ export const products = [
                     'RAL 7024': 'https://centermk.ru/upload/iblock/a77/a77481dc761f086d107f211bc724d9ff.jpg'
                 }
             },
-            { id: 'evrobrus', name: 'Евро брус', totalWidth: 210, workingWidth: 190, image: 'https://centermk.ru/upload/iblock/878/igxm2jeek43xi0faj16fuf4sk522f10a/Metallosayding-Evro_Brus-pod-brus-dlya-fasada.webp' },
-            { id: 'blokkhaus', name: 'Блок хаус', totalWidth: 260, workingWidth: 230, image: 'https://centermk.ru/upload/iblock/85a/6k98f1vpo5hcp42k88eifxhdaa2d19ey/Metallicheskiy-sayding-Evro_Brus-pod-brus-dlya-fasada-doma.webp' },
+            { id: 'evrobrus', name: 'Евро брус', totalWidth: 210, workingWidth: 190, image: 'https://centermk.ru/upload/iblock/878/igxm2jeek43xi0faj16fuf4sk522f10a/Metallosayding-Evro_Brus-pod-brus-dlya-fasada.webp', colorImages: { 'RAL 7024': 'https://centermk.ru/upload/iblock/a77/a77481dc761f086d107f211bc724d9ff.jpg', 'RAL 8017': 'https://centermk.ru/upload/iblock/b35/q51e941q3at67b84k61ly6p3z29unm2h.jpg' } },
+            { id: 'blokkhaus', name: 'Блок хаус', totalWidth: 260, workingWidth: 230, image: 'https://centermk.ru/upload/iblock/85a/6k98f1vpo5hcp42k88eifxhdaa2d19ey/Metallicheskiy-sayding-Evro_Brus-pod-brus-dlya-fasada-doma.webp', colorImages: { 'RAL 7024': 'https://centermk.ru/upload/iblock/a77/a77481dc761f086d107f211bc724d9ff.jpg', 'RAL 8017': 'https://centermk.ru/upload/iblock/b35/q51e941q3at67b84k61ly6p3z29unm2h.jpg' } },
             { id: 'brevno4d', name: 'Бревно 4D', totalWidth: 337, workingWidth: 337, image: 'https://centermk.ru/upload/iblock/bda/eo3y7rhlc9ygvb90fl97gn33n7lfw8rq/Metallicheskiy-sayding-Brevno-Rublenoe-4D-dlya-fasada_1.webp' }
         ]
     },
@@ -147,8 +171,8 @@ export const products = [
         id: 'lameli',
         name: 'Ламели (Евро жалюзи)',
         description: 'Современное решение для ограждений',
-        image: IMG.lameli,
-        thicknesses: ['0.45'],
+        image: 'https://centermk.ru/upload/iblock/a0c/a0c2cca9d2db19e66347292a49f11bfc.jpg',
+        thicknesses: ['0.45', '0.5', '0.65'],
         customLength: true,
         models: [
             {
@@ -156,11 +180,13 @@ export const products = [
                 name: 'Евро жалюзи',
                 totalWidth: 115,
                 workingWidth: 115,
-                image: 'https://centermk.ru/upload/iblock/c34/10000787_ral3005_krasnoe_vino.jpg',
+                image: 'https://centermk.ru/upload/iblock/a0c/a0c2cca9d2db19e66347292a49f11bfc.jpg',
                 colorImages: {
                     'RAL 3005': 'https://centermk.ru/upload/iblock/c34/10000787_ral3005_krasnoe_vino.jpg',
                     'RAL 6005': 'https://centermk.ru/upload/iblock/c2d/10000781_ral6005_zelenyj_moh.jpg',
-                    'RAL 7024': 'https://centermk.ru/upload/iblock/a0c/a0c2cca9d2db19e66347292a49f11bfc.jpg'
+                    'RAL 7024': 'https://centermk.ru/upload/iblock/a0c/a0c2cca9d2db19e66347292a49f11bfc.jpg',
+                    'RAL 8017': 'https://centermk.ru/upload/iblock/af0/p5ll8nghumnz6jfv2s0lr0nyqyp6o8yu/4m40pu1xc68ux4c36jhf2mpv8j309raq.jpg',
+                    'RAL 9003': 'https://centermk.ru/upload/iblock/bbb/60oxue11l27fjuy1cvq1qrb0abqtshab/h43d4v40m55zu72tx60zdzf1k5nen0b4.jpg'
                 }
             }
         ]
